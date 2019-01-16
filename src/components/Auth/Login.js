@@ -1,17 +1,41 @@
 import React from 'react';
-import {
-  Form, Icon, Input, Button, Checkbox,
-} from 'antd';
+import { Form, Icon, Input, Button, Checkbox, } from 'antd';
+import firebase from '../../firebase';
+import { Link } from "react-router-dom";
 import './Login.css'
 
 class NormalLoginForm extends React.Component {
+  state = {
+    email: '',
+    password: '',
+    loading: false,
+    errors: [],
+  };
+
   handleSubmit = (e) => {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
       if (!err) {
-        console.log('Received values of form: ', values);
+        this.setState({ errors: [], loading: true });
+        firebase
+          .auth()
+          .signInWithEmailAndPassword(this.state.email, this.state.password)
+          .then(signedInUser => {
+            console.log(signedInUser)
+          })
+          .catch(err => {
+            console.error(err);
+            this.setState({
+              errors: this.state.errors.concat(err),
+              loading:false
+            })
+          });
       }
     });
+  }
+
+  handleChange = event => {
+    this.setState({ [event.target.name]: event.target.value });
   }
 
   render() {
@@ -22,14 +46,30 @@ class NormalLoginForm extends React.Component {
           {getFieldDecorator('email', {
             rules: [{ required: true, message: 'Please input your email!' }],
           })(
-            <Input prefix={<Icon type="mail" style={{ color: 'rgba(0,0,0,.25)' }} />} placeholder="Email" />
+            <Input 
+              name="email"
+              prefix={<Icon 
+                type="mail" 
+                style={{ color: 'rgba(0,0,0,.25)' }} />
+              } 
+              placeholder="Email" 
+              onChange={this.handleChange} 
+            />
           )}
         </Form.Item>
         <Form.Item>
           {getFieldDecorator('password', {
             rules: [{ required: true, message: 'Please input your Password!' }],
           })(
-            <Input prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />} type="password" placeholder="Password" />
+            <Input.Password 
+              name="password"
+              prefix={
+                <Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />
+              } 
+              type="password" 
+              placeholder="Password" 
+              onChange={this.handleChange} 
+            />
           )}
         </Form.Item>
         <Form.Item>
@@ -39,11 +79,11 @@ class NormalLoginForm extends React.Component {
           })(
             <Checkbox>Remember me</Checkbox>
           )}
-          <a className="login-form-forgot" href="">Forgot password</a>
+          <Link className="login-form-forgot"  to="/">Forgot password</Link>
           <Button type="primary" htmlType="submit" className="login-form-button">
             Log in
           </Button>
-          Or <a href="">register now!</a>
+          Or <Link  to="/login">register now!</Link>
         </Form.Item>
       </Form>
     );

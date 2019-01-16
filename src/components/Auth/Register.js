@@ -10,7 +10,6 @@ class NormalRegisterForm extends React.Component {
     username: '',
     email: '',
     password: '',
-    passwordConfirmation: '',
     loading: false,
     errors: [],
     usersRef: firebase.database().ref("users"),
@@ -18,9 +17,7 @@ class NormalRegisterForm extends React.Component {
 
   handleSubmit = event => {
     event.preventDefault();
-    console.log("submitted...");
     this.props.form.validateFields((err, values) => { if (!err) { 
-      console.log("validated and continuing...");
       this.setState({ errors: [], loading: true });
       firebase
         .auth()
@@ -31,7 +28,6 @@ class NormalRegisterForm extends React.Component {
               displayName: this.state.username,
             })
             .then(() => {
-              console.log("saving user to database...")
               this.saveUser(createdUser).then(() => {
                 console.log("user saved");
               });
@@ -55,7 +51,6 @@ class NormalRegisterForm extends React.Component {
   }
 
   saveUser = createdUser => {
-    console.log(createdUser);
     return this.state.usersRef.push(createdUser.user.uid).set({
       username: createdUser.user.displayName,
     });

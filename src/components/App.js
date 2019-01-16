@@ -55,23 +55,11 @@ render() {
         <Header style={{ background: '#fff', padding: 0 }} />
         <Content style={{ margin: '24px 16px 0', overflow: 'initial' }}>
           <div style={{ padding: 24, background: '#fff', textAlign: 'center' }}>
-            ...
-            <br />
-            Really
-            <br />...<br />...<br />...<br />
-            long
-            <br />...<br />...<br />...<br />...<br />...<br />...
-            <br />...<br />...<br />...<br />...<br />...<br />...
-            <br />...<br />...<br />...<br />...<br />...<br />...
-            <br />...<br />...<br />...<br />...<br />...<br />...
-            <br />...<br />...<br />...<br />...<br />...<br />...
-            <br />...<br />...<br />...<br />...<br />...<br />...
-            <br />...<br />...<br />...<br />...<br />...<br />
-            content
+            Hello App
           </div>
         </Content>
         <Footer style={{ textAlign: 'center' }}>
-          Ant Design ©2018 Created by Ant UED
+          Footer
         </Footer>
       </Layout>
     </Layout>
