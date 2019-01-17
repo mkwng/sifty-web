@@ -3,9 +3,9 @@ import { Layout } from 'antd';
 import './App.css';
 
 import SidePanel from './SidePanel/SidePanel';
-import ContentHeader from './ContentHeader/ContentHeader';
 import Content from './Content/Content';
-import ContentFooter from './ContentFooter/ContentFooter';
+import ContentHeader from './Content/ContentHeader';
+import ContentFooter from './Content/ContentFooter';
 
 class App extends React.Component {
 render() {
