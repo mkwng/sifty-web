@@ -11,7 +11,6 @@ import Register from './components/Auth/Register';
 
 // Styles
 import 'antd/dist/antd.css';
-import { Skeleton } from 'antd';
 
 // Router
 import { BrowserRouter as Router, Switch, Route, withRouter } from 'react-router-dom';
@@ -38,7 +37,7 @@ class Root extends React.Component {
   }
 
   render() {
-    return this.props.isLoading ? <Skeleton active /> : (
+    return this.props.isLoading ? <App isAuthed={false} /> : (
       <Switch>
         <Route exact path="/" component={App} />
         <Route path="/login" component={Login} />
@@ -48,13 +47,13 @@ class Root extends React.Component {
   }
 }
 
-const mapStateFromProps = state => ({
+const mapStateToProps = state => ({
   isLoading: state.user.isLoading
 });
 
 const RootWithAuth = withRouter(
   connect(
-    mapStateFromProps, 
+    mapStateToProps, 
     { setUser, clearUser }
   )(Root)
 );

@@ -7,7 +7,7 @@ import firebase from '../../firebase'
 const { Header } = Layout;
 
 
-class ContentHeader extends React.Component {
+class UserMenu extends React.Component {
 
   handleSignout = (e) => {
     e.preventDefault();
@@ -36,15 +36,15 @@ class ContentHeader extends React.Component {
     );
 
     return(
-        <Header style={{ background: '#fff', padding: 0 }}>
+        <div>
           <Dropdown overlay={dropdownMenu}>
-            <Link to="/" className="ant-dropdown-link" href="#" style={{ float: 'right', paddingRight: '16px' }} >
+            <Link to="/" className="ant-dropdown-link" href="#" >
               { this.props.currentUser ? this.props.currentUser.displayName : "Loading..." } <Icon type="down" />
             </Link>
           </Dropdown>
-        </Header>
+        </div>
     );
   }
 }
 
-export default ContentHeader;
+export default UserMenu;

@@ -5,7 +5,9 @@ import './SidePanel.css'
 const { Sider } = Layout;
 
 class SidePanel extends React.Component {
+
   render() {
+
     return(
       <Sider 
         breakpoint="sm"
