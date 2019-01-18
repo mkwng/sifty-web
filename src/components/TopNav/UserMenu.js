@@ -11,11 +11,9 @@ class UserMenu extends React.Component {
 
   handleSignout = (e) => {
     e.preventDefault();
-    console.log("Signing out...");
     firebase
       .auth()
       .signOut()
-      .then(() => console.log('Signed out!'))
   }
 
   render () {

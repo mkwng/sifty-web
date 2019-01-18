@@ -11,12 +11,10 @@ class TopNav extends React.Component {
 
   handleToggle = (e) => {
     e.preventDefault();
-    console.log("click");
     this.setState({ isExpanded: !this.state.isExpanded })
   }
 
   render() {
-    console.log(this.state.isExpanded);
     return (
       <div>
 

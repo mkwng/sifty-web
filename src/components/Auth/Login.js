@@ -83,7 +83,7 @@ class NormalLoginForm extends React.Component {
           <Button type="primary" htmlType="submit" className="login-form-button">
             Log in
           </Button>
-          Or <Link  to="/login">register now!</Link>
+          Or <Link  to="/register">register now!</Link>
         </Form.Item>
       </Form>
     );

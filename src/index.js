@@ -39,7 +39,7 @@ class Root extends React.Component {
   render() {
     return this.props.isLoading ? <App isAuthed={false} /> : (
       <Switch>
-        <Route exact path="/" component={App} />
+        <Route exact path="/" render={ (props) => <App {...props} isAuthed={true} /> } />
         <Route path="/login" component={Login} />
         <Route path="/register" component={Register} />
       </Switch>
