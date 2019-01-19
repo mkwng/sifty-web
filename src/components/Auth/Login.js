@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form, Icon, Input, Button, Checkbox, } from 'antd';
+import { Form, Icon, Input, Button, Checkbox, message } from 'antd';
 import firebase from '../../firebase';
 import { Link } from "react-router-dom";
 import './Login.css'
@@ -22,9 +22,10 @@ class NormalLoginForm extends React.Component {
           .signInWithEmailAndPassword(this.state.email, this.state.password)
           .then(signedInUser => {
             console.log(signedInUser)
+            message.success("Welcome back, " + signedInUser.user.displayName + "!");
           })
           .catch(err => {
-            console.error(err);
+            message.error(err.message);
             this.setState({
               errors: this.state.errors.concat(err),
               loading:false

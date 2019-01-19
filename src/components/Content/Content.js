@@ -7,7 +7,6 @@ class Content extends React.Component {
     return(
         <Layout style={{ margin: '24px 16px 0', overflow: 'initial' }}>
           <div style={{ padding: 24, background: '#fff', textAlign: 'center' }}>
-            <Skeleton active loading={this.props.isLoading}/>
             <DocumentGrid />
           </div>
         </Layout>

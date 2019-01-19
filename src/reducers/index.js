@@ -23,8 +23,25 @@ const user_reducer = (state = initialUserState, action) => {
   }
 }
 
+const initialCollectionState = {
+  currentCollection: null
+};
+
+const collection_reducer = (state = initialCollectionState, action) => {
+  switch (action.type) {
+    case actionTypes.SET_CURRENT_COLLECTION:
+      return {
+        ...state,
+        currentCollection: action.payload.currentCollection
+      }
+    default:
+      return state;
+  }
+}
+
 const rootReducer = combineReducers({
-  user: user_reducer
+  user: user_reducer,
+  collection: collection_reducer
 });
 
 export default rootReducer;

@@ -10,6 +10,7 @@ import Login from './components/Auth/Login';
 import Register from './components/Auth/Register';
 
 // Styles
+import { Spin } from 'antd';
 import 'antd/dist/antd.css';
 
 // Router
@@ -21,6 +22,7 @@ import { Provider, connect } from 'react-redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import rootReducer from './reducers';
 import { setUser, clearUser } from './actions';
+
 const store = createStore(rootReducer, composeWithDevTools());
 
 class Root extends React.Component {
@@ -37,7 +39,9 @@ class Root extends React.Component {
   }
 
   render() {
-    return this.props.isLoading ? <App isAuthed={false} /> : (
+    return this.props.isLoading ? (
+      <Spin tip="Loading..." /> 
+    ) : (
       <Switch>
         <Route exact path="/" render={ (props) => <App {...props} isAuthed={true} /> } />
         <Route path="/login" component={Login} />

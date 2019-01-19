@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form, Input, Checkbox, Button, Icon } from 'antd';
+import { Form, Input, Checkbox, Button, Icon, message } from 'antd';
 import './Register.css';
 import firebase from '../../firebase';
 import { Link } from "react-router-dom";
@@ -29,11 +29,11 @@ class NormalRegisterForm extends React.Component {
             })
             .then(() => {
               this.saveUser(createdUser).then(() => {
-                console.log("user saved");
+                message.success('User created!');
               });
             })
             .catch(err => {
-              console.error(err);
+              message.error(err.message);
               this.setState({
                 errors: this.state.errors.concat(err),
                 loading: false
@@ -41,7 +41,7 @@ class NormalRegisterForm extends React.Component {
             });
         })
         .catch(err => {
-          console.error(err);
+          message.error(err.message);
           this.setState({
             errors: this.state.errors.concat(err),
             loading: false

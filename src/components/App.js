@@ -3,25 +3,25 @@ import { Layout } from 'antd';
 import './App.css';
 import { connect } from 'react-redux';
 
-// import SidePanel from './SidePanel/SidePanel';
-import Content from './Content/Content';
-// import ContentHeader from './Content/ContentHeader';
-// import ContentFooter from './Content/ContentFooter';
 import TopNav from './TopNav/TopNav';
+import Content from './Content/Content';
 
-class App extends React.Component {
-  render() {
-    return(
-      <Layout>
-        <TopNav currentUser={this.props.currentUser} />
-        <Content isLoading={!this.props.isAuthed} />
-      </Layout>
-    )
-  }
-}
+const App = ({ currentUser, currentCollection }) => (
+  <Layout>
+    <TopNav 
+      key={currentUser && currentUser.uid} 
+      currentUser={currentUser} 
+    />
+    <Content 
+      key={currentCollection && currentCollection.id}
+      collection={currentCollection}
+    />
+  </Layout>
+)
 
 const mapStateToProps = state => ({
-  currentUser: state.user.currentUser
+  currentUser: state.user.currentUser,
+  currentCollection: state.collection.currentCollection
 })
 
 export default connect(mapStateToProps)(App)

@@ -7,7 +7,10 @@ const Card = styled.div`
   height: 100%;
   overflow: hidden;
   border-radius: 11px;
-  &:hover {
+  transition: transform 80ms, box-shadow 80ms;
+  box-shadow:0px 0px 0px rgba(0,0,0,0);
+  background:#ffffff;
+  &:hover,&:active {
     &::after {
       content:"";
       position:absolute;
@@ -19,6 +22,10 @@ const Card = styled.div`
       mix-blend-mode:multiply;
       background-color: rgba(0,0,0,.025);
       border-radius:11px;
+    }
+    &:active{
+      transform:translateY(-4px);
+      box-shadow:0px 8px 16px rgba(0,0,0,0.1);
     }
   }
 `
@@ -35,9 +42,9 @@ const CardThumbnail = styled.div`
     display: block;
     position: absolute;
     bottom: 0;
-    left: 32px;
-    right: 32px;
-    height: calc(100% - 32px);
+    left: 24px;
+    right: 24px;
+    height: calc(100% - 24px);
     pointer-events:none;
     background: linear-gradient(to bottom, rgba(0,0,0,0) 0%,rgba(0,0,0,0) 67%,rgba(0,0,0,0.3) 100%);
   }
