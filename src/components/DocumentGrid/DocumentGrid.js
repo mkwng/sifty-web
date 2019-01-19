@@ -108,8 +108,8 @@ class DocumentGrid extends React.Component {
                                  dragEnabled={true}
                                  responsive={true}
                                  verticalMargin={42}
-                                 itemWidth={240}
-                                 itemHeight={240}/>, document.getElementById('documents-grid'));
+                                 itemWidth={304}
+                                 itemHeight={216}/>, document.getElementById('documents-grid'));
     };
 
     render();
