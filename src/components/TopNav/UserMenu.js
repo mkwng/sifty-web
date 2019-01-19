@@ -1,10 +1,8 @@
 import React from 'react';
-import { Layout, Menu, Dropdown, Icon } from 'antd';
+import { Menu, Dropdown, Icon } from 'antd';
 import { Link } from "react-router-dom";
 import firebase from '../../firebase'
 
-
-const { Header } = Layout;
 
 
 class UserMenu extends React.Component {

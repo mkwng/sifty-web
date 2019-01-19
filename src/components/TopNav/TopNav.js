@@ -18,7 +18,7 @@ class TopNav extends React.Component {
     return (
       <div>
 
-        <a href="#" onClick={this.handleToggle}> <Logo /> </a>
+        <a href="/" onClick={this.handleToggle}> <Logo /> </a>
 
         <UserMenu currentUser={this.props.currentUser} />
 

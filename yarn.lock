@@ -8911,6 +8911,11 @@ rc@^1.2.7:
     minimist "^1.2.0"
     strip-json-comments "~2.0.1"
 
+react-absolute-grid@^3.0.1:
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/react-absolute-grid/-/react-absolute-grid-3.0.1.tgz#a97b8dded6083770215967e4cc277d1eca68dbc8"
+  integrity sha512-Eh1WqFk/jPA2CN6aci5WRgYKKmiwl52WLSB9+DHHa/b1iUIZ00qKC7IUfkIhhi3Iz9uVzsUwap0HfDO6zkeIWA==
+
 react-app-polyfill@^0.2.0:
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/react-app-polyfill/-/react-app-polyfill-0.2.0.tgz#60eaf037223b2f3a5671f45e5ac3b418f0b48ad2"
