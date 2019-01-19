@@ -1,6 +1,6 @@
 import React from 'react';
 import DocumentGrid from '../DocumentGrid/DocumentGrid';
-import { Skeleton, Layout } from 'antd';
+import { Layout } from 'antd';
 
 class Content extends React.Component {
   render () {

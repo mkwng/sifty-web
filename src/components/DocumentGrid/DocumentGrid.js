@@ -1,12 +1,10 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import DocumentCard from './DocumentCard';
 import createAbsoluteGrid from 'react-absolute-grid';
+import {message} from 'antd';
 import * as _ from 'lodash';
 
 const AbsoluteGrid = createAbsoluteGrid(DocumentCard);
-
-
 
 const cardTypes = {
   GOOGLE: {
@@ -54,21 +52,22 @@ const fakeData = [
 ]
 
 class DocumentGrid extends React.Component {
-  componentDidMount() {
+  constructor(props) {
+    super(props);
+    this.state = {
+      gridItems: fakeData,
+    }
+    this.onMove =  _.debounce(this.onMove, 40).bind(this);
+  }
 
-    let sampleItems = fakeData;
-    let render;
+  onMove = function(source, target) {
+    if(target && source){
+      source = _.find(this.state.gridItems, {key: parseInt(source, 10)});
+      target = _.find(this.state.gridItems, {key: parseInt(target, 10)});
+      const targetSort = target.sort;
   
-    //Change the item's sort order
-    var onMove = function(source, target) {
-      if(target && source){
-        source = _.find(sampleItems, {key: parseInt(source, 10)});
-        target = _.find(sampleItems, {key: parseInt(target, 10)});
-        console.log(source,target);
-        const targetSort = target.sort;
-    
-        //CAREFUL, For maximum performance we must maintain the array's order, but change sort
-        sampleItems = sampleItems.map(function(item){
+      this.setState({
+        gridItems: this.state.gridItems.map(function(item) {
           //Decrement sorts between positions when target is greater
           if(item.key === source.key) {
             return {
@@ -88,42 +87,26 @@ class DocumentGrid extends React.Component {
             };
           }
           return item;
-        });
-        //Perf.start();
-        render();
-        //Perf.stop();
-        //Perf.printWasted();
-      } else {
-        console.log("missing target or source");
-        return;
-      }
-    };
-  
-    var onMoveDebounced = _.debounce(onMove, 40);
-  
-    const AbsoluteGrid = createAbsoluteGrid(DocumentCard);
-    render = function(){
-      ReactDOM.render(<AbsoluteGrid items={sampleItems}
-                                 onMove={onMoveDebounced}
-                                 dragEnabled={true}
-                                 responsive={true}
-                                 verticalMargin={42}
-                                 itemWidth={304}
-                                 animation='transform 100ms ease'
-                                 itemHeight={216}/>, document.getElementById('documents-grid'));
-    };
-
-    render();
-  
-  }
-
-  componentWillUnmount() {
-    ReactDOM.unmountComponentAtNode(document.getElementById('documents-grid'))
+        }),
+      })
+    } else {
+      console.log("missing target or source");
+      return;
+    }
   }
 
   render() {
     return (
       <div id="documents-grid"> 
+        <AbsoluteGrid items={this.state.gridItems}
+                      onMove={this.onMove}
+                      dragEnabled={true}
+                      responsive={true}
+                      verticalMargin={42}
+                      itemWidth={304}
+                      animation='transform 100ms ease'
+                      itemHeight={216}
+        />
       </div>
     )
   }
