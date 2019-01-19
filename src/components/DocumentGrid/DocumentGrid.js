@@ -109,6 +109,7 @@ class DocumentGrid extends React.Component {
                                  responsive={true}
                                  verticalMargin={42}
                                  itemWidth={304}
+                                 animation='transform 100ms ease'
                                  itemHeight={216}/>, document.getElementById('documents-grid'));
     };
 
