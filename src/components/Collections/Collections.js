@@ -3,6 +3,7 @@ import firebase from '../../firebase';
 import { connect } from "react-redux";
 import { setCurrentCollection } from "../../actions";
 import { Drawer, Form, Button, Input, Icon, message } from 'antd';
+import { Link } from "react-router-dom";
 
 class Collections extends React.Component {
   state = {
@@ -105,7 +106,7 @@ class Collections extends React.Component {
         style={{ opacity: 0.7 }}
         active={collection.id === this.state.activeCollection}
       >
-        # {collection.name}
+        <Link to={"/collection/" + collection.id}>{collection.name}</Link>
       </div>
     ));
 

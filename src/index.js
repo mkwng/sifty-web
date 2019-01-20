@@ -44,6 +44,7 @@ class Root extends React.Component {
     ) : (
       <Switch>
         <Route exact path="/" render={ (props) => <App {...props} isAuthed={true} /> } />
+        <Route path="/collection" render={ (props) => <App {...props} isAuthed={true} /> } />
         <Route path="/login" component={Login} />
         <Route path="/register" component={Register} />
       </Switch>

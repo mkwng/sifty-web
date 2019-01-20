@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import TopNav from './TopNav/TopNav';
 import Content from './Content/Content';
 
-const App = ({ currentUser, currentCollection }) => (
+const App = ({ currentUser, currentCollection, match }) => (
   <Layout>
     <TopNav 
       key={currentUser && currentUser.uid} 
@@ -16,6 +16,7 @@ const App = ({ currentUser, currentCollection }) => (
       key={currentCollection && currentCollection.id}
       collection={currentCollection}
       currentUser={currentUser} 
+      match={match}
     />
   </Layout>
 )
