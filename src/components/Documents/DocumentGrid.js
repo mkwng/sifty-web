@@ -1,7 +1,8 @@
 import React from 'react';
 import DocumentCard from './DocumentCard';
 import createAbsoluteGrid from 'react-absolute-grid';
-import {message} from 'antd';
+// import {message} from 'antd';
+import firebase from '../../firebase';
 import * as _ from 'lodash';
 
 const AbsoluteGrid = createAbsoluteGrid(DocumentCard);
@@ -56,8 +57,37 @@ class DocumentGrid extends React.Component {
     super(props);
     this.state = {
       gridItems: fakeData,
+      collection: this.props.currentCollection,
+      user: this.props.currentUser,
+      documentsRef: firebase.database().ref("documents"),
+      documents: [],
+      documentsLoading: true 
     }
     this.onMove =  _.debounce(this.onMove, 40).bind(this);
+  }
+
+  componentDidMount() {
+    const { collection, user } = this.state;
+
+    if(collection && user) {
+      this.addListeners(collection.id);
+    }
+  }
+
+  addListeners = collectionId => {
+    this.addDocumentListener(collectionId);
+  }
+
+  addDocumentListener = collectionId => {
+    let loadedDocuments = []
+    this.state.documentsRef.child(collectionId).on('child_added', snap => {
+      loadedDocuments.push(snap.val());
+      console.log(loadedDocuments);
+      this.setState({
+        documents: loadedDocuments,
+        documentsLoading: false,
+      })
+    })
   }
 
   onMove = function(source, target) {
@@ -96,6 +126,7 @@ class DocumentGrid extends React.Component {
   }
 
   render() {
+    // const { documentsRef } = this.state;
     return (
       <div id="documents-grid"> 
         <AbsoluteGrid items={this.state.gridItems}

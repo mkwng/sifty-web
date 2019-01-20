@@ -15,6 +15,7 @@ const App = ({ currentUser, currentCollection }) => (
     <Content 
       key={currentCollection && currentCollection.id}
       collection={currentCollection}
+      currentUser={currentUser} 
     />
   </Layout>
 )
