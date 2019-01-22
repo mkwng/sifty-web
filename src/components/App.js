@@ -14,7 +14,7 @@ const App = ({ currentUser, currentCollection, match }) => (
     />
     <Content 
       key={currentCollection && currentCollection.id}
-      collection={currentCollection}
+      currentCollection={currentCollection}
       currentUser={currentUser} 
       match={match}
     />

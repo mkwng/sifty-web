@@ -99,7 +99,10 @@ class DocumentCard extends React.Component {
           <CardThumbnailImage><img src={this.props.item.thumbnailUrl} alt={this.props.item.description} /></CardThumbnailImage>
         </CardThumbnail>
         <CardDescription>
-          <CardDescriptionTitle>{this.props.item.title}</CardDescriptionTitle>
+          <CardDescriptionTitle>
+            {this.props.item.title}
+            {this.props.item.url}
+          </CardDescriptionTitle>
           <CardDescriptionContext><Icon type="ellipsis"/></CardDescriptionContext>
         </CardDescription>
       </Card>
