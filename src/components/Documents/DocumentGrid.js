@@ -37,19 +37,20 @@ class DocumentGrid extends React.Component {
   addDocumentListener = collectionId => {
     let loadedDocuments = []
     this.state.documentsRef.child(collectionId).on('child_added', snap => {
-      loadedDocuments.push(snap.val());
+      let newDoc = snap.val();
+      newDoc.key = snap.key;
+      loadedDocuments.push(newDoc);
       this.setState({
         documents: loadedDocuments,
         documentsLoading: false,
       })
-      console.log(this.state.documents);
     })
   }
 
   onMove = function(source, target) {
     if(target && source){
-      source = _.find(this.state.documents, {key: parseInt(source, 10)});
-      target = _.find(this.state.documents, {key: parseInt(target, 10)});
+      source = _.find(this.state.documents, {key: source});
+      target = _.find(this.state.documents, {key: target});
       const targetSort = target.sort;
   
       this.setState({
@@ -82,7 +83,6 @@ class DocumentGrid extends React.Component {
   }
 
   render() {
-    console.log(this.state.documents);
     return (
       <div id="documents-grid"> 
         <AbsoluteGrid items={this.state.documents}
