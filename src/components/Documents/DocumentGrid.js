@@ -11,7 +11,6 @@ const AbsoluteGrid = createAbsoluteGrid(DocumentCard);
 class DocumentGrid extends React.Component {
   constructor(props) {
     super(props);
-    console.log(this.props);
     this.state = {
       documentsRef: firebase.database().ref("documents"),
       documents: [],
@@ -89,7 +88,7 @@ class DocumentGrid extends React.Component {
                       onMove={this.onMove}
                       dragEnabled={true}
                       responsive={true}
-                      verticalMargin={42}
+                      verticalMargin={8}
                       itemWidth={304}
                       animation='transform 100ms ease'
                       itemHeight={216}

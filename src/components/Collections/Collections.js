@@ -56,7 +56,7 @@ class Collections extends React.Component {
       name: collectionName,
       details: collectionDetails,
       createdBy: {
-        uid: user.id,
+        id: user.uid,
         name: user.displayName,
       }
     };

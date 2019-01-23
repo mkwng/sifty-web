@@ -4,7 +4,7 @@ import "firebase/database";
 import "firebase/storage";
 
 var config = {
-  apiKey: "***REMOVED***",
+  apiKey: `${process.env.REACT_APP_FIREBASE_API_KEY}`,
   authDomain: "sifty-organization.firebaseapp.com",
   databaseURL: "https://sifty-organization.firebaseio.com",
   projectId: "sifty-organization",

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Modal, Button, Icon, Input, Form, message } from 'antd';
 import firebase from '../../firebase';
+import axios from 'axios';
 
 
 class DocumentAdder extends React.Component{
@@ -76,12 +77,30 @@ class DocumentAdder extends React.Component{
     }
   }
 
+  testCapture = () => {
+    message.success("Attempting to capture screenshot...");
+    axios.get('https://us-central1-sifty-organization.cloudfunctions.net/grabScreen')
+      .then(res => {
+        message.success("Success");
+        console.log(res);
+      })
+      .catch(err => {
+        message.error("Error");
+        console.log(err);
+      });
+  }
+
   render() {
     return(
       <div>
         <Button type="primary" onClick={this.showModal}>
           <Icon type="plus" /> Add document
         </Button>
+        &nbsp;&nbsp;
+        <Button type="primary" onClick={this.testCapture}>
+          <Icon type="global" /> Test screen capture
+        </Button>
+
         <Modal
           title="Basic Modal"
           visible={this.state.visible}
