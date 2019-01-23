@@ -57,17 +57,18 @@ class DocumentAdder extends React.Component{
 
   newDocument = () => {
     const { documentsRef, collection } = this.state;
-
+    const newDocData = this.createDocument();
     if (this.state.url) {
       this.setState({ loading: true });
-      console.log(this.createDocument());
+      var key;
       documentsRef
         .child(collection.id)
-        .push()
-        .set(this.createDocument())
-        .then(() => {
+        .push(newDocData)
+        .then((snap) => {
+          key = snap.key;
           this.setState({ loading: false, visible: false, url: "", errors: [] })
           message.success("New document added!");
+          this.captureImage(newDocData.url, this.props.collection.id, key);
         })
         .catch(err => {
           message.error(err.message);
@@ -77,11 +78,9 @@ class DocumentAdder extends React.Component{
     }
   }
 
-  testCapture = () => {
-    message.success("Attempting to capture screenshot...");
-    axios.get('https://api.sifty.space/grabScreen')
+  captureImage = (url, collectionId, documentId) => {
+    axios.get('https://api.sifty.space/grabScreen?url=' + url + '&key=' + collectionId + '/' + documentId)
       .then(res => {
-        message.success("Success");
         console.log(res);
       })
       .catch(err => {
@@ -95,10 +94,6 @@ class DocumentAdder extends React.Component{
       <div>
         <Button type="primary" onClick={this.showModal}>
           <Icon type="plus" /> Add document
-        </Button>
-        &nbsp;&nbsp;
-        <Button type="primary" onClick={this.testCapture}>
-          <Icon type="global" /> Test screen capture
         </Button>
 
         <Modal

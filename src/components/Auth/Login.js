@@ -21,7 +21,6 @@ class NormalLoginForm extends React.Component {
           .auth()
           .signInWithEmailAndPassword(this.state.email, this.state.password)
           .then(signedInUser => {
-            console.log(signedInUser)
             message.success("Welcome back, " + signedInUser.user.displayName + "!");
           })
           .catch(err => {
