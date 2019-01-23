@@ -79,7 +79,7 @@ class DocumentAdder extends React.Component{
 
   testCapture = () => {
     message.success("Attempting to capture screenshot...");
-    axios.get('https://us-central1-sifty-organization.cloudfunctions.net/grabScreen')
+    axios.get('https://api.sifty.space/grabScreen')
       .then(res => {
         message.success("Success");
         console.log(res);
