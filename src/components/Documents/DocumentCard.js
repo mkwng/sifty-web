@@ -98,8 +98,6 @@ class DocumentCard extends React.Component {
     if(r.test(metadata.image)) {
       return metadata.image;
     } else {
-      console.log("relative")
-      console.log(metadata.image)
       if (metadata.image.startsWith('/')) {
         var el = document.createElement('a');
         el.href = metadata.url;
