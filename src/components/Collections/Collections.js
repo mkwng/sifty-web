@@ -103,8 +103,8 @@ class Collections extends React.Component {
         key={collection.id}
         onClick={() => this.changeCollection(collection)}
         name={collection.name}
-        style={{ opacity: 0.7 }}
-        active={collection.id === this.state.activeCollection}
+        style={{ opacity: "0.7" }}
+        active={collection.id === this.state.activeCollection ? "true" : "false"}
       >
         <Link to={"/collection/" + collection.id}>{collection.name}</Link>
       </div>

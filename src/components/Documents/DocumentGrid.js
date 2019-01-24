@@ -39,7 +39,6 @@ class DocumentGrid extends React.Component {
       let newDoc = snap.val();
       newDoc.key = snap.key;
       loadedDocuments.push(newDoc);
-      console.log("new doc");
       this.setState({
         documents: loadedDocuments,
         documentsLoading: false,

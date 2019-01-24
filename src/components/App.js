@@ -9,11 +9,11 @@ import Content from './Content/Content';
 const App = ({ currentUser, currentCollection, match }) => (
   <Layout>
     <TopNav 
-      key={currentUser && currentUser.uid} 
+      key={currentUser ? currentUser.uid : null} 
       currentUser={currentUser} 
     />
     <Content 
-      key={currentCollection && currentCollection.id}
+      key={currentCollection ? currentCollection.id : null}
       currentCollection={currentCollection}
       currentUser={currentUser} 
       match={match}

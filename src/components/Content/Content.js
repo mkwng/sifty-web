@@ -12,14 +12,14 @@ class Content extends React.Component {
         <div style={{ padding: 24, background: '#fff', textAlign: 'center' }}>
           <Route exact path={this.props.match.path} render={() => (
             <Collections
-              key={this.props.currentUser && this.props.currentUser.uid} 
+              key={this.props.currentUser ? this.props.currentUser.uid : null} 
               currentUser={this.props.currentUser}
               currentCollection={this.props.currentCollection}
             />
           )} />
           <Route path={`${this.props.match.path}/:collectionId`} render={() => (
             <DocumentGrid
-              key={this.props.currentUser && this.props.currentUser.uid} 
+              key={this.props.currentUser ? this.props.currentUser.uid : null} 
               currentUser={this.props.currentUser}
               currentCollection={this.props.currentCollection}
             />

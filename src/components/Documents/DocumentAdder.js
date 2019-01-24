@@ -12,6 +12,7 @@ class DocumentAdder extends React.Component{
     user: this.props.user,
     loading: false,
     url: "",
+    metadata: null,
     errors: []
   }
 
@@ -44,48 +45,60 @@ class DocumentAdder extends React.Component{
         name: this.state.user.displayName,
       },
       url: this.state.url,
+      metadata: this.state.metadata,
       sort: this.props.collectionSize + 1,
-      thumbnailUrl: "https://picsum.photos/240/160", 
-      title: "Test 1",
-      description: "Description",
-      lastVisited: "1 hour ago",
-      lastUpdated: "6 days ago",
-      fileType: null,
+      lastVisited: firebase.database.ServerValue.TIMESTAMP,
     }
     return document;
   }
 
   newDocument = () => {
     const { documentsRef, collection } = this.state;
-    const newDocData = this.createDocument();
     if (this.state.url) {
       this.setState({ loading: true });
-      var key;
-      documentsRef
-        .child(collection.id)
-        .push(newDocData)
-        .then((snap) => {
-          key = snap.key;
-          this.setState({ loading: false, visible: false, url: "", errors: [] })
-          message.success("New document added!");
-          this.captureImage(newDocData.url, this.props.collection.id, key);
+      this.getUrlMetadata(this.state.url)
+      .then(result => {
+        this.setState({
+          metadata: result.data
         })
-        .catch(err => {
-          message.error(err.message);
-        })
+        const newDocData = this.createDocument();
+        return documentsRef.child(collection.id).push(newDocData)
+      })
+      .then((snap) => {
+        if(!(this.state.metadata && this.state.metadata.image)) {
+          console.log("about to capture this image")
+          this.captureImage(this.state.url, this.props.collection.id, snap.key);
+        }
+        return this.setState({ loading: false, visible: false, url: "", metadata: null, errors: [] })
+      })
+      .catch(err => {
+        message.error(err.message);
+      });
     } else {
       message.error("Please input a URL to save");
     }
   }
 
   captureImage = (url, collectionId, documentId) => {
-    axios.get('https://api.sifty.space/grabScreen?url=' + url + '&key=' + collectionId + '/' + documentId)
+    return axios.get('https://api.sifty.space/grabScreen?url=' + url + '&key=' + collectionId + '/' + documentId)
       .then(res => {
-        console.log(res);
+        // console.log(res);
       })
       .catch(err => {
         message.error("Error");
-        console.log(err);
+        console.error(err);
+      });
+  }
+
+  getUrlMetadata = (url) => {
+    return axios.get('https://api.sifty.space/getUrlMetadata?url=' + url)
+      .then(res => {
+        return res;
+      })
+      .catch(err => {
+        message.error(err.message);
+        console.error(err);
+        return;
       });
   }
 
@@ -95,6 +108,7 @@ class DocumentAdder extends React.Component{
         <Button type="primary" onClick={this.showModal}>
           <Icon type="plus" /> Add document
         </Button>
+        &nbsp;
 
         <Modal
           title="Basic Modal"

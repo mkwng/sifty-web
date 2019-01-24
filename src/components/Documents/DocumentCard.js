@@ -46,7 +46,7 @@ const CardThumbnail = styled.div`
     right: 24px;
     height: calc(100% - 24px);
     pointer-events:none;
-    background: linear-gradient(to bottom, rgba(0,0,0,0) 0%,rgba(0,0,0,0) 67%,rgba(0,0,0,0.3) 100%);
+    background: linear-gradient(to bottom, rgba(0,0,0,0) 0%,rgba(0,0,0,0) 67%,rgba(0,0,0,0.05) 100%);
   }
 `
 const CardThumbnailFavicon = styled.div`
@@ -91,17 +91,36 @@ const CardDescriptionContext = styled.div`
 `
 
 class DocumentCard extends React.Component {
+
+  imageUrl = (metadata) => {
+    // https://stackoverflow.com/questions/10687099/how-to-test-if-a-url-string-is-absolute-or-relative
+    var r = new RegExp('^(?:[a-z]+:)?//', 'i');
+    if(r.test(metadata.image)) {
+      return metadata.image;
+    } else {
+      console.log("relative")
+      console.log(metadata.image)
+      if (metadata.image.startsWith('/')) {
+        var el = document.createElement('a');
+        el.href = metadata.url;
+        return el.origin + metadata.image;
+      } else {
+        return metadata.url + metadata.image;
+      }
+    }
+  }
+
   render() {
     return (
       <Card>
         <CardThumbnail>
           <CardThumbnailFavicon><Icon type="align-left"/></CardThumbnailFavicon>
-          <CardThumbnailImage><img src={this.props.item.thumbnailUrl} alt={this.props.item.description} /></CardThumbnailImage>
+          <CardThumbnailImage><img src={this.imageUrl(this.props.item.metadata)} alt={this.props.item.metadata.description} /></CardThumbnailImage>
         </CardThumbnail>
         <CardDescription>
           <CardDescriptionTitle>
-            {this.props.item.title}
-            {this.props.item.url}
+            <h3>{this.props.item.metadata.title}</h3>
+            <p>{this.props.item.url}</p>
           </CardDescriptionTitle>
           <CardDescriptionContext><Icon type="ellipsis"/></CardDescriptionContext>
         </CardDescription>
