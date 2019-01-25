@@ -30,9 +30,9 @@ class Root extends React.Component {
     firebase.auth().onAuthStateChanged(user => {
       if (user) {
         this.props.setUser(user);
-        this.props.history.push('/')
+        this.props.history.push('/'+user.displayName)
       } else {
-        this.props.history.push('/login')
+        this.props.history.push('/')
         this.props.clearUser();
       }
     })
@@ -43,10 +43,10 @@ class Root extends React.Component {
       <Spin tip="Loading..." /> 
     ) : (
       <Switch>
-        <Route exact path="/" render={ (props) => <App {...props} isAuthed={true} /> } />
-        <Route path="/collection" render={ (props) => <App {...props} isAuthed={true} /> } />
+        <Route exact path="/" component={Login} />
         <Route path="/login" component={Login} />
         <Route path="/register" component={Register} />
+        <Route path="/:username" render={ (props) => <App {...props} isAuthed={true} /> } />
       </Switch>
     )
   }
