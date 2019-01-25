@@ -12,7 +12,7 @@ class Collections extends React.Component {
     collections: [],
     collectionName: "",
     collectionDetails: "",
-    collectionsRef: firebase.database().ref("collections"),
+    collectionsRef: firebase.database().ref("users/" + this.props.currentUser.uid + "/collections"),
     drawer: false,
     firstLoad: true
   }
@@ -49,7 +49,7 @@ class Collections extends React.Component {
   addCollection = () => {
     const { collectionsRef, collectionName, collectionDetails, user } = this.state;
 
-    const key = collectionsRef.push().key;
+    const key = collectionsRef.push()
 
     const newCollection = {
       id: key,
@@ -58,6 +58,9 @@ class Collections extends React.Component {
       createdBy: {
         id: user.uid,
         name: user.displayName,
+      },
+      roles: {
+        [user.uid]: "owner"
       }
     };
 

@@ -91,6 +91,28 @@ const CardDescriptionContext = styled.div`
 `
 
 class DocumentCard extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = props.item;
+  }
+
+  componentDidMount() {
+    if(!this.state.metadata.image) {
+      this.addImageListener();
+    }
+  }
+
+  componentWillUnmount() {
+    this.removeImageListener();
+  }
+
+  addImageListener = () => {
+
+  }
+
+  removeImageListener = () => {
+
+  }
 
   imageUrl = (metadata) => {
     // https://stackoverflow.com/questions/10687099/how-to-test-if-a-url-string-is-absolute-or-relative
@@ -113,12 +135,12 @@ class DocumentCard extends React.Component {
       <Card>
         <CardThumbnail>
           <CardThumbnailFavicon><Icon type="align-left"/></CardThumbnailFavicon>
-          <CardThumbnailImage><img src={this.imageUrl(this.props.item.metadata)} alt={this.props.item.metadata.description} /></CardThumbnailImage>
+          <CardThumbnailImage><img src={this.imageUrl(this.state.metadata)} alt={this.state.metadata.description} /></CardThumbnailImage>
         </CardThumbnail>
         <CardDescription>
           <CardDescriptionTitle>
-            <h3>{this.props.item.metadata.title}</h3>
-            <p>{this.props.item.url}</p>
+            <h3>{this.state.metadata.title}</h3>
+            <p>{this.state.url}</p>
           </CardDescriptionTitle>
           <CardDescriptionContext><Icon type="ellipsis"/></CardDescriptionContext>
         </CardDescription>

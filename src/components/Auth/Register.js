@@ -13,47 +13,33 @@ class NormalRegisterForm extends React.Component {
     loading: false,
     errors: [],
     usersRef: firebase.database().ref("users"),
-  };
+  }
 
   handleSubmit = event => {
     event.preventDefault();
-    this.props.form.validateFields((err, values) => { if (!err) { 
-      this.setState({ errors: [], loading: true });
-      firebase
-        .auth()
+    this.props.form.validateFields((err, values) => { if (!err) {
+      this.setState({ errors: [], loading: true }); 
+      firebase.auth()
         .createUserWithEmailAndPassword(this.state.email, this.state.password)
         .then(createdUser => {
+          // User now created, update with display name
           createdUser.user
-            .updateProfile({
-              displayName: this.state.username,
-            })
-            .then(() => {
-              this.saveUser(createdUser).then(() => {
-                message.success('User created!');
-              });
-            })
-            .catch(err => {
-              message.error(err.message);
-              this.setState({
-                errors: this.state.errors.concat(err),
-                loading: false
-              });
-            });
-        })
-        .catch(err => {
-          message.error(err.message);
-          this.setState({
-            errors: this.state.errors.concat(err),
-            loading: false
-          });
-        });
-    }})
-  }
+            .updateProfile({ displayName: this.state.username })
+            .catch(err => { console.error(err) });
 
-  saveUser = createdUser => {
-    return this.state.usersRef.push(createdUser.user.uid).set({
-      username: createdUser.user.displayName,
-    });
+          // Take the key and display name, store in database
+          this.state.usersRef.child(createdUser.user.uid)
+            .set({ username: this.state.username })
+            .then(() => { message.success("User created!") })
+            .catch(err => { console.error(err) });
+
+          // Add username to database
+          firebase.database().ref("usernames")
+            .update({ [this.state.username]: createdUser.user.uid} )
+            .catch(err => { console.error(err) });
+        })
+        .catch(err => { console.log(err) });
+    }})
   }
 
   isFormValid = function() {
