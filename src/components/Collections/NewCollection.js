@@ -1,19 +1,79 @@
 import React from 'react';
-import { Form, Input, Button, Drawer, Icon } from 'antd';
+import { Form, Input, Button, Drawer, Icon, message } from 'antd';
+import firebase from '../../firebase';
 
 class NewCollection extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      visible: false,
+      loading: false,
+      name: "", 
+      details: "",
+      ref: {
+        collections: firebase.database().ref('collections'),
+        user:firebase.database().ref(`users/${this.props.username}`)
+      }
+    }
+  }
+
+  handleSubmit = event => {
+    event.preventDefault();
+    if (this.isFormValid(this.state)) {
+      this.setState({ loading: true, visible: false });
+      this.addCollection()
+      .then(() => {
+        this.setState({
+          loading: false,
+          name: "", 
+          details: ""
+        });
+      })
+      .catch(err => {
+        console.error(err);
+        message.error(err.message);
+      });
+    } else {
+      message.error("Missing fields");
+    }
+  };
+
+  addCollection = () => {
+    let newCollectionRef = this.state.ref.collections.push();
+    const newCollectionData = {
+      name: this.state.name,
+      safename: safeString(this.state.name),
+      details: this.state.details,
+      timestamp: firebase.database.ServerValue.TIMESTAMP,
+      roles: { [this.props.username]: "owner" }
+    };
+
+    return Promise.all([
+      this.state.ref.collections.child(newCollectionRef.key).set(newCollectionData),
+      this.state.ref.user.child(`collections`).child(newCollectionRef.key).set("owner")
+    ]);
+
+  };
+
+  handleChange = event => { this.setState({ [event.target.name]: event.target.value }); }
+  isFormValid = ({ name, details }) => {
+    return name && details
+  }
+  showDrawer = () => this.setState({ visible: true });
+  closeDrawer = () => this.setState({ visible: false });
+
   render() {
     return(
       <div>
-        <Button type="primary" onClick={this.props.showDrawer}>
+        <Button type="primary" onClick={this.showDrawer}>
           <Icon type="plus" /> New collection
         </Button>
 
         <Drawer
           title="Create a collection"
           width={480}
-          onClose={this.props.closeDrawer}
-          visible={this.props.drawer}
+          onClose={this.closeDrawer}
+          visible={this.state.visible}
           style={{
             overflow: 'auto',
             height: 'calc(100% - 108px)',
@@ -30,7 +90,7 @@ class NewCollection extends React.Component {
                 } 
                 placeholder="Name of collection"
                 label="Name of Collection"
-                name="collectionName"
+                name="name"
                 onChange={this.handleChange}
               />
             </Form.Item>
@@ -42,7 +102,7 @@ class NewCollection extends React.Component {
                 } 
                 placeholder="Description"
                 label="About the Collection"
-                name="collectionDetails"
+                name="details"
                 onChange={this.handleChange}
                 autosize={{ minRows: 2, maxRows: 6 }}
               />
@@ -72,5 +132,16 @@ class NewCollection extends React.Component {
     )
   }
 }
+
+
+function safeString(unsafeString) {
+  //https://stackoverflow.com/questions/14107522/producing-seo-friendly-url-in-javascript   
+  return unsafeString.toString().toLowerCase()
+    .split(/\&+/).join("-and-")
+    .split(/[^a-z0-9]/).join("-")
+    .split(/-+/).join("-")
+    .trim('-');
+}
+
 
 export default NewCollection

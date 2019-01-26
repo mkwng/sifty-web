@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form, Input, Checkbox, Button, Icon, message } from 'antd';
+import { Form, Input, Checkbox, Button, Icon } from 'antd';
 import './Register.css';
 import firebase from '../../firebase';
 import { Link } from "react-router-dom";
@@ -22,21 +22,10 @@ class NormalRegisterForm extends React.Component {
       firebase.auth()
         .createUserWithEmailAndPassword(this.state.email, this.state.password)
         .then(createdUser => {
-          // User now created, update with display name
-          createdUser.user
-            .updateProfile({ displayName: this.state.username })
-            .catch(err => { console.error(err) });
-
-          // Take the key and display name, store in database
-          this.state.usersRef.child(createdUser.user.uid)
-            .set({ username: this.state.username })
-            .then(() => { message.success("User created!") })
-            .catch(err => { console.error(err) });
-
-          // Add username to database
-          firebase.database().ref("usernames")
-            .update({ [this.state.username]: createdUser.user.uid} )
-            .catch(err => { console.error(err) });
+          return Promise.all([
+            createdUser.user.updateProfile({ displayName: this.state.username }),
+            this.state.usersRef.child(this.state.username).set({ displayName: this.state.username })  
+          ])
         })
         .catch(err => { console.log(err) });
     }})
@@ -127,7 +116,7 @@ class NormalRegisterForm extends React.Component {
           <Button type="primary" htmlType="submit" className="register-form-button">
             Register
           </Button>
-          Or <Link to="/login">login now!</Link>
+          Or <Link to="/">login now!</Link>
         </Form.Item>
       </Form>
     );

@@ -1,6 +1,6 @@
 import React from 'react';
 import DocumentCard from './DocumentCard';
-import DocumentAdder from './DocumentAdder';
+import NewDocument from './NewDocument';
 import createAbsoluteGrid from 'react-absolute-grid';
 
 import firebase from '../../firebase';
@@ -8,14 +8,13 @@ import * as _ from 'lodash';
 
 const AbsoluteGrid = createAbsoluteGrid(DocumentCard);
 
-class DocumentGrid extends React.Component {
+class Documents extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       documentsRef: firebase.database().ref("documents"),
       documents: [],
       documentsLoading: true,
-      collection: this.props.currentCollection,
       user: this.props.currentUser,
     }
     this.onMove =  _.debounce(this.onMove, 40).bind(this);
@@ -25,7 +24,7 @@ class DocumentGrid extends React.Component {
     const { collection, user } = this.state;
 
     if(collection && user) {
-      this.addListeners(collection.id);
+      this.addListeners(this.props.match.params.collection);
     }
   }
 
@@ -93,12 +92,13 @@ class DocumentGrid extends React.Component {
                       animation='transform 100ms ease'
                       itemHeight={216}
         />
-        <DocumentAdder collectionSize={this.state.documents.length} 
-                       collection={this.state.collection} 
-                       user={this.state.user} />
+        <NewDocument collectionSize={this.state.documents.length} 
+                     cid={this.props.match.params.collection} 
+                     username={this.props.currentUser.displayName}
+        />
       </div>
     )
   }
 }
 
-export default DocumentGrid;
+export default Documents;
