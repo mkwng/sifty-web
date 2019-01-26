@@ -13,9 +13,10 @@ class NewDocument extends React.Component{
       metadata: null,
       ref: {
         documents: firebase.database().ref(`documents`),
-        collection: firebase.database().ref(`collections/${this.props.collectionId}`)
+        collection: firebase.database().ref(`collections/${this.props.collectionId}/documents`)
       }
     }
+    this.getUrlMetadata = this.getUrlMetadata.bind(this);
   }
 
   handleChange = event => { this.setState({ [event.target.name]: event.target.value }); }
@@ -25,9 +26,10 @@ class NewDocument extends React.Component{
 
   handleOk = () => { 
     if(this.isFormValid(this.state)){
-      this.setState({ loading: true });
+      this.setState({ loading: true, visible: false });
       this.addDocument()
       .then(() => {
+        message.success("New document added");
         this.setState({
           loading: false,
           url: "", 
@@ -45,14 +47,22 @@ class NewDocument extends React.Component{
 
   addDocument = () => {
     let newDocumentRef = this.state.ref.documents.push();
+    let t = this;
 
     return this.getUrlMetadata(this.state.url)
     .then(result => {
-      this.setState({ metadata: result.data })
-      if(!(this.state.metadata && this.state.metadata.image)) { this.captureImage(this.state.url, newDocumentRef); }
+      t.setState({ metadata: result.data })
+      if(!(t.state.metadata && t.state.metadata.image)) { t.captureImage(t.state.url, newDocumentRef); }
+      let newDocumentData = {
+        url: t.state.url,
+        metadata: t.state.metadata,
+        collection: {
+          [t.props.collectionName]: true
+        }
+      }
       return Promise.all([
-        this.state.ref.documents.child(newDocumentRef.key).set(this.state.document),
-        this.state.ref.collection.child(`documents/${newDocumentRef.key}`).set(this.props.collectionSize + 1)
+        t.state.ref.documents.child(newDocumentRef.key).set(newDocumentData),
+        t.state.ref.collection.child(newDocumentRef.key).set(t.props.collectionSize + 1)
       ]);
     })
   }
@@ -66,7 +76,7 @@ class NewDocument extends React.Component{
   }
 
   getUrlMetadata = (url) => {
-    return axios.get('https://api.sifty.space/getUrlMetadata?url=' + url);
+    return axios.get('https://api.sifty.space/getUrlMetadata?url=' + url)
   }
 
   render() {

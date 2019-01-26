@@ -40,9 +40,10 @@ class NewCollection extends React.Component {
 
   addCollection = () => {
     let newCollectionRef = this.state.ref.collections.push();
+    let newCollectionName = safeString(this.state.name);
     const newCollectionData = {
       name: this.state.name,
-      safename: safeString(this.state.name),
+      safename: newCollectionName,
       details: this.state.details,
       timestamp: firebase.database.ServerValue.TIMESTAMP,
       roles: { [this.props.username]: "owner" }
@@ -50,7 +51,7 @@ class NewCollection extends React.Component {
 
     return Promise.all([
       this.state.ref.collections.child(newCollectionRef.key).set(newCollectionData),
-      this.state.ref.user.child(`collections`).child(newCollectionRef.key).set("owner")
+      this.state.ref.user.child(`collections`).child(newCollectionName).set(newCollectionRef.key)
     ]);
 
   };

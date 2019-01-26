@@ -5,6 +5,7 @@ import createAbsoluteGrid from 'react-absolute-grid';
 
 import firebase from '../../firebase';
 import * as _ from 'lodash';
+import { message } from 'antd';
 
 const AbsoluteGrid = createAbsoluteGrid(DocumentCard);
 
@@ -14,34 +15,54 @@ class Documents extends React.Component {
     this.state = {
       documentsRef: firebase.database().ref("documents"),
       documents: [],
-      documentsLoading: true,
+      loading: true,
       user: this.props.currentUser,
+      collectionId: "",
+      ref: {
+        documents: firebase.database().ref("documents"),
+        user: firebase.database().ref(`users/${this.props.currentUser.displayName}`)
+      }
     }
     this.onMove =  _.debounce(this.onMove, 40).bind(this);
   }
 
   componentDidMount() {
-    const { collection, user } = this.state;
-
-    if(collection && user) {
-      this.addListeners(this.props.match.params.collection);
+    if(this.props.currentUser && this.props.match.params.collection) {
+      Promise.all([
+        this.getCollectionId(),
+        this.addListeners(this.props.match.params.collection)
+      ]).then(() => {
+        this.setState({ loading: false });
+      })
     }
   }
 
+  getCollectionId = () => {
+    return this.state.ref.user.once('value', snap => {
+      let tempUser = snap.val();
+      if(tempUser.collections && tempUser.collections[this.props.match.params.collection]) {
+        return this.setState({
+          collectionId: tempUser.collections[this.props.match.params.collection]
+        });
+      } else {
+        return message.error("No collection found here!");
+      }
+    });
+  }
+
   addListeners = collectionId => {
-    this.addDocumentListener(collectionId);
+    return this.addDocumentListener(collectionId);
   }
 
   addDocumentListener = collectionId => {
     let loadedDocuments = []
-    this.state.documentsRef.child(collectionId).on('child_added', snap => {
+    return this.state.documentsRef.child(collectionId).on('child_added', snap => {
       let newDoc = snap.val();
       newDoc.key = snap.key;
       loadedDocuments.push(newDoc);
-      this.setState({
+      return this.setState({
         documents: loadedDocuments,
-        documentsLoading: false,
-      })
+      });
     })
   }
 
@@ -92,10 +113,14 @@ class Documents extends React.Component {
                       animation='transform 100ms ease'
                       itemHeight={216}
         />
-        <NewDocument collectionSize={this.state.documents.length} 
-                     cid={this.props.match.params.collection} 
-                     username={this.props.currentUser.displayName}
-        />
+        {
+          this.state.collectionId &&
+          <NewDocument collectionSize={this.state.documents.length} 
+                      collectionName={this.props.match.params.collection}
+                      collectionId={this.state.collectionId} 
+                      username={this.props.currentUser.displayName}
+          />
+        }
       </div>
     )
   }
