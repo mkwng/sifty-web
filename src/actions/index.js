@@ -5,7 +5,7 @@ export const setUser = user => {
   return {
     type: actionTypes.SET_USER,
     payload: {
-      currentUser: user
+      user: user
     }
   };
 };
@@ -17,11 +17,17 @@ export const clearUser = () => {
 };
 
 /* Collection Actions */
-export const setCurrentCollection = collection => {
+export const setCollection = collection => {
   return {
-    type: actionTypes.SET_CURRENT_COLLECTION,
+    type: actionTypes.SET_COLLECTION,
     payload: {
-      currentCollection: collection
+      collection: collection
     }
   }
 }
+
+export const clearCollection = () => {
+  return {
+    type: actionTypes.CLEAR_COLLECTION
+  };
+};

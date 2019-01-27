@@ -24,7 +24,11 @@ class NormalRegisterForm extends React.Component {
         .then(createdUser => {
           return Promise.all([
             createdUser.user.updateProfile({ displayName: this.state.username }),
-            this.state.usersRef.child(this.state.username).set({ displayName: this.state.username })  
+            this.state.usersRef.child(this.state.username).set({ 
+              displayName: this.state.username,
+              uid: createdUser.user.uid,
+              email: this.state.email
+            })
           ])
         })
         .catch(err => { console.log(err) });

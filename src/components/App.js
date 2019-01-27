@@ -13,14 +13,16 @@ class App extends React.Component {
     return (
       <div>
         <TopNav 
-          currentUser={this.props.currentUser} 
+          user={this.props.user} 
         />
         <div>
-            <Route exact path={this.props.match.path} render={(routeProps) => (
-              <Collections {...routeProps} currentUser={this.props.currentUser} currentCollection={this.props.currentCollection}/>
-            )} />
+            <Route exact path={this.props.match.path} render={(routeProps) => {
+              return this.props.user ? (
+                <Collections {...routeProps} user={this.props.user} collection={this.props.collection}/>
+              ) : (<div />);
+            }} />
             <Route path={`${this.props.match.path}/:collection`} render={(routeProps) => (
-              <Documents {...routeProps} currentUser={this.props.currentUser} currentCollection={this.props.currentCollection}/>
+              <Documents {...routeProps} user={this.props.user} collection={this.props.collection}/>
             )} />
         </div>
     
@@ -30,8 +32,8 @@ class App extends React.Component {
 }
 
 const mapStateToProps = state => ({
-  currentUser: state.user.currentUser,
-  currentCollection: state.collection.currentCollection
+  user: state.user.user,
+  collection: state.collection.collection
 })
 
 export default connect(mapStateToProps)(App)

@@ -3,22 +3,32 @@ import DocumentCard from './DocumentCard';
 import NewDocument from './NewDocument';
 import createAbsoluteGrid from 'react-absolute-grid';
 import { connect } from "react-redux";
-import { setCurrentCollection } from '../../actions';
+import { setCollection } from '../../actions';
 
 import firebase from '../../firebase';
 import * as _ from 'lodash';
 import { message } from 'antd';
+import TopNav from '../TopNav/TopNav';
 
 const AbsoluteGrid = createAbsoluteGrid(DocumentCard);
 
 class Documents extends React.Component {
   constructor(props) {
     super(props);
-    this.collectionId = this.props.currentUser.collections[this.props.match.params.collection];
+    // Who is the owner?
+    let c = this.props.user.collections;
+    let p = this.props.match.params.collection
+    if(c.owner) { this.collectionId = c.owner[p] ? c.owner[p] : c.collaborator[p]; } 
+    else { this.collectionId = c.collaborator[p] }
+    if(!this.collectionId) { 
+      message.error("Collection not found!") 
+      return;
+    }
+
     this.state = {
       documents: [],
       loading: true,
-      user: this.props.currentUser,
+      user: this.props.user,
       ref: {
         documents: firebase.database().ref('documents').orderByChild('collection').startAt(this.collectionId).endAt(this.collectionId),
         collection: firebase.database().ref(`collections/${this.collectionId}`),
@@ -40,7 +50,7 @@ class Documents extends React.Component {
 
   addCollectionListener = () => {
     this.state.ref.collection.on('value', snap => {
-      this.props.setCurrentCollection(snap.val());
+      this.props.setCollection(snap.val());
     })
   }
   addDocumentListener = () => {
@@ -93,6 +103,7 @@ class Documents extends React.Component {
   render() {
     return (
       <div id="documents-grid"> 
+        <TopNav> </TopNav>
         <AbsoluteGrid items={this.state.documents}
                       onMove={this.onMove}
                       dragEnabled={true}
@@ -113,5 +124,5 @@ class Documents extends React.Component {
 
 export default connect(
   null,
-  { setCurrentCollection }
+  { setCollection }
 )(Documents);

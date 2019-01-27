@@ -2,7 +2,7 @@ import { combineReducers } from 'redux';
 import * as actionTypes from '../actions/types';
 
 const initialUserState = {
-  currentUser: null,
+  user: null,
   isLoading: true,
 }
 
@@ -10,7 +10,7 @@ const user_reducer = (state = initialUserState, action) => {
   switch (action.type) {
     case actionTypes.SET_USER:
       return {
-        currentUser: action.payload.currentUser,
+        user: action.payload.user,
         isLoading: false,
       }
     case actionTypes.CLEAR_USER:
@@ -24,15 +24,16 @@ const user_reducer = (state = initialUserState, action) => {
 }
 
 const initialCollectionState = {
-  currentCollection: null
+  collection: null,
+  isLoading: false,
 };
 
 const collection_reducer = (state = initialCollectionState, action) => {
   switch (action.type) {
-    case actionTypes.SET_CURRENT_COLLECTION:
+    case actionTypes.SET_COLLECTION:
       return {
         ...state,
-        currentCollection: action.payload.currentCollection
+        collection: action.payload.collection
       }
     default:
       return state;

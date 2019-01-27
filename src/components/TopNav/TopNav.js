@@ -20,7 +20,7 @@ class TopNav extends React.Component {
 
         <a href="/" onClick={this.handleToggle}> <Logo /> </a>
 
-        <UserMenu currentUser={this.props.currentUser} />
+        <UserMenu user={this.props.user} />
 
         <TopMenu isVisible={this.state.isExpanded} />
 

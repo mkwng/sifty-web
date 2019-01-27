@@ -35,7 +35,7 @@ class UserMenu extends React.Component {
         <div>
           <Dropdown overlay={dropdownMenu}>
             <Link to="/" className="ant-dropdown-link" href="#" >
-              { this.props.currentUser ? this.props.currentUser.displayName : "Loading..." } <Icon type="down" />
+              { this.props.user ? this.props.user.displayName : "Loading..." } <Icon type="down" />
             </Link>
           </Dropdown>
         </div>

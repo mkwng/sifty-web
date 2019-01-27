@@ -12,7 +12,7 @@ class NewCollection extends React.Component {
       details: "",
       ref: {
         collections: firebase.database().ref('collections'),
-        user:firebase.database().ref(`users/${this.props.username}`)
+        user:firebase.database().ref(`users/${this.props.user.uid}`)
       }
     }
   }
@@ -46,12 +46,13 @@ class NewCollection extends React.Component {
       safename: newCollectionName,
       details: this.state.details,
       timestamp: firebase.database.ServerValue.TIMESTAMP,
-      roles: { [this.props.username]: "owner" }
+      owner: this.props.user.displayName,
+      roles: { [this.props.user.uid]: "owner" }
     };
 
     return Promise.all([
       this.state.ref.collections.child(newCollectionRef.key).set(newCollectionData),
-      this.state.ref.user.child(`collections`).child(newCollectionName).set(newCollectionRef.key)
+      this.state.ref.user.child(`collections/owner`).child(newCollectionName).set(newCollectionRef.key)
     ]);
 
   };
