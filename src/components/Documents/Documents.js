@@ -7,7 +7,6 @@ import { setCollection } from '../../actions';
 
 import firebase from '../../firebase';
 import * as _ from 'lodash';
-import { message } from 'antd';
 import TopNav from '../TopNav/TopNav';
 
 const AbsoluteGrid = createAbsoluteGrid(DocumentCard);
@@ -16,16 +15,13 @@ class Documents extends React.Component {
   constructor(props) {
     super(props);
 
-    let c = this.props.user.collections;
-    let p = this.props.match.params.collection;
-    let u = this.props.match.params.username;
-    let k = Object.keys(c);
-    let v = Object.values(c);
-
+    let k = Object.keys(this.props.user.collections);
     k.map((key,index) => {
-      if(c[key] === u + '/' + p ) { 
+      if(this.props.user.collections[key] === this.props.match.params.username + '/' + this.props.match.params.collection ) { 
         this.collectionId = k[index];
+        return true;
       }
+      return false;
     })
 
     this.state = {
@@ -106,7 +102,7 @@ class Documents extends React.Component {
   render() {
     return (
       <div id="documents-grid"> 
-        <TopNav> </TopNav>
+        <TopNav user={this.props.user}> </TopNav>
         <AbsoluteGrid items={this.state.documents}
                       onMove={this.onMove}
                       dragEnabled={true}

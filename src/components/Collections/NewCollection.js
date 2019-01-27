@@ -46,13 +46,13 @@ class NewCollection extends React.Component {
       safename: newCollectionName,
       details: this.state.details,
       timestamp: firebase.database.ServerValue.TIMESTAMP,
-      owner: this.props.user.displayName,
+      owner: this.props.user.username,
       roles: { [this.props.user.uid]: "owner" }
     };
 
     return Promise.all([
       this.state.ref.collections.child(newCollectionRef.key).set(newCollectionData),
-      this.state.ref.user.child(`collections/owner`).child(newCollectionRef.key).set(newCollectionName)
+      this.state.ref.user.child(`collections`).child(newCollectionRef.key).set(`${this.props.user.username}/${newCollectionName}`)
     ]);
 
   };
