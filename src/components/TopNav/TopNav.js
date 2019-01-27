@@ -1,5 +1,4 @@
 import React from 'react';
-import Logo from '../Common/Logo';
 import TopMenu from './TopMenu';
 import UserMenu from './UserMenu';
 
@@ -18,7 +17,7 @@ class TopNav extends React.Component {
     return (
       <div>
 
-        <a href="/" onClick={this.handleToggle}> <Logo /> </a>
+        <a href="/" onClick={this.handleToggle}> Logo </a>
 
         <UserMenu user={this.props.user} />
 
