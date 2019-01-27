@@ -56,9 +56,7 @@ class NewDocument extends React.Component{
       let newDocumentData = {
         url: t.state.url,
         metadata: t.state.metadata,
-        collection: {
-          [t.props.collectionName]: true
-        }
+        collection: this.props.collectionId
       }
       return Promise.all([
         t.state.ref.documents.child(newDocumentRef.key).set(newDocumentData),

@@ -27,9 +27,13 @@ const store = createStore(rootReducer, composeWithDevTools());
 
 class Root extends React.Component {
   componentDidMount() {
+    let userRef = firebase.database().ref('users');
     firebase.auth().onAuthStateChanged(user => {
+      userRef.off();
       if (user) {
-        this.props.setUser(user);
+        userRef = firebase.database().ref(`users/${user.displayName}`).on('value', snap => {
+          this.props.setUser(snap.val())
+        })
         this.props.history.push('/'+user.displayName)
       } else {
         this.props.history.push('/')

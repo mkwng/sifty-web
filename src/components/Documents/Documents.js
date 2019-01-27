@@ -2,6 +2,8 @@ import React from 'react';
 import DocumentCard from './DocumentCard';
 import NewDocument from './NewDocument';
 import createAbsoluteGrid from 'react-absolute-grid';
+import { connect } from "react-redux";
+import { setCurrentCollection } from '../../actions';
 
 import firebase from '../../firebase';
 import * as _ from 'lodash';
@@ -12,55 +14,42 @@ const AbsoluteGrid = createAbsoluteGrid(DocumentCard);
 class Documents extends React.Component {
   constructor(props) {
     super(props);
+    this.collectionId = this.props.currentUser.collections[this.props.match.params.collection];
     this.state = {
-      documentsRef: firebase.database().ref("documents"),
       documents: [],
       loading: true,
       user: this.props.currentUser,
-      collectionId: "",
       ref: {
-        documents: firebase.database().ref("documents"),
-        user: firebase.database().ref(`users/${this.props.currentUser.displayName}`)
+        documents: firebase.database().ref('documents').orderByChild('collection').startAt(this.collectionId).endAt(this.collectionId),
+        collection: firebase.database().ref(`collections/${this.collectionId}`),
       }
     }
     this.onMove =  _.debounce(this.onMove, 40).bind(this);
   }
+  componentDidMount() { this.addListeners() }
+  componentWillUnmount() { this.removeListeners() }
 
-  componentDidMount() {
-    if(this.props.currentUser && this.props.match.params.collection) {
-      Promise.all([
-        this.getCollectionId(),
-        this.addListeners(this.props.match.params.collection)
-      ]).then(() => {
-        this.setState({ loading: false });
-      })
-    }
+  addListeners = () => {
+    this.addCollectionListener();
+    this.addDocumentListener();
+  }
+  removeListeners = () => {
+    this.state.ref.collection.off();
+    this.state.ref.documents.off();
   }
 
-  getCollectionId = () => {
-    return this.state.ref.user.once('value', snap => {
-      let tempUser = snap.val();
-      if(tempUser.collections && tempUser.collections[this.props.match.params.collection]) {
-        return this.setState({
-          collectionId: tempUser.collections[this.props.match.params.collection]
-        });
-      } else {
-        return message.error("No collection found here!");
-      }
-    });
+  addCollectionListener = () => {
+    this.state.ref.collection.on('value', snap => {
+      this.props.setCurrentCollection(snap.val());
+    })
   }
-
-  addListeners = collectionId => {
-    return this.addDocumentListener(collectionId);
-  }
-
-  addDocumentListener = collectionId => {
+  addDocumentListener = () => {
     let loadedDocuments = []
-    return this.state.documentsRef.child(collectionId).on('child_added', snap => {
+    this.state.ref.documents.on('child_added', snap => {
       let newDoc = snap.val();
       newDoc.key = snap.key;
       loadedDocuments.push(newDoc);
-      return this.setState({
+      this.setState({
         documents: loadedDocuments,
       });
     })
@@ -113,17 +102,16 @@ class Documents extends React.Component {
                       animation='transform 100ms ease'
                       itemHeight={216}
         />
-        {
-          this.state.collectionId &&
-          <NewDocument collectionSize={this.state.documents.length} 
-                      collectionName={this.props.match.params.collection}
-                      collectionId={this.state.collectionId} 
-                      username={this.props.currentUser.displayName}
-          />
-        }
+        <NewDocument collectionSize={this.state.documents.length} 
+                    collectionName={this.props.match.params.collection}
+                    collectionId={this.collectionId} 
+        />
       </div>
     )
   }
 }
 
-export default Documents;
+export default connect(
+  null,
+  { setCurrentCollection }
+)(Documents);

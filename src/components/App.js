@@ -15,13 +15,12 @@ class App extends React.Component {
         <TopNav 
           currentUser={this.props.currentUser} 
         />
-
         <div>
             <Route exact path={this.props.match.path} render={(routeProps) => (
-              <Collections {...routeProps} currentUser={this.props.currentUser}/>
+              <Collections {...routeProps} currentUser={this.props.currentUser} currentCollection={this.props.currentCollection}/>
             )} />
             <Route path={`${this.props.match.path}/:collection`} render={(routeProps) => (
-              <Documents {...routeProps} currentUser={this.props.currentUser}/>
+              <Documents {...routeProps} currentUser={this.props.currentUser} currentCollection={this.props.currentCollection}/>
             )} />
         </div>
     
