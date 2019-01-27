@@ -7,15 +7,18 @@ import TopNav from '../TopNav/TopNav';
 class Collections extends React.Component {
   constructor(props) {
     super(props);
+    let collectionProps = Object.keys(this.props.user.collections).map(key => {
+      return { key: key, path: this.props.user.collections[key] }
+    })
     this.state = {
-      collections: [],
+      collections: collectionProps,
       ref: {
         collections: firebase.database().ref(`collections`),
       }
     };
   }
-  componentDidMount() { this.addListeners() }
-  componentWillUnmount() { this.removeListeners() }
+  // componentDidMount() { this.addListeners() }
+  // componentWillUnmount() { this.removeListeners() }
 
   addListeners = () => {
     let loadedCollections = [];

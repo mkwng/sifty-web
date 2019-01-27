@@ -52,7 +52,7 @@ class NewCollection extends React.Component {
 
     return Promise.all([
       this.state.ref.collections.child(newCollectionRef.key).set(newCollectionData),
-      this.state.ref.user.child(`collections/owner`).child(newCollectionName).set(newCollectionRef.key)
+      this.state.ref.user.child(`collections/owner`).child(newCollectionRef.key).set(newCollectionName)
     ]);
 
   };

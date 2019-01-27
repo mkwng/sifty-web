@@ -15,15 +15,18 @@ const AbsoluteGrid = createAbsoluteGrid(DocumentCard);
 class Documents extends React.Component {
   constructor(props) {
     super(props);
-    // Who is the owner?
+
     let c = this.props.user.collections;
-    let p = this.props.match.params.collection
-    if(c.owner) { this.collectionId = c.owner[p] ? c.owner[p] : c.collaborator[p]; } 
-    else { this.collectionId = c.collaborator[p] }
-    if(!this.collectionId) { 
-      message.error("Collection not found!") 
-      return;
-    }
+    let p = this.props.match.params.collection;
+    let u = this.props.match.params.username;
+    let k = Object.keys(c);
+    let v = Object.values(c);
+
+    k.map((key,index) => {
+      if(c[key] === u + '/' + p ) { 
+        this.collectionId = k[index];
+      }
+    })
 
     this.state = {
       documents: [],

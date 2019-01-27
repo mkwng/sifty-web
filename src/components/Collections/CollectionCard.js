@@ -6,7 +6,7 @@ class CollectionCard extends React.Component {
   render() {
     return(
       <div>
-        <Link to={this.props.owner + "/" + this.props.safename}>{this.props.name}</Link>
+        <Link to={this.props.path}>{this.props.path}</Link>
       </div>
     );
   }
