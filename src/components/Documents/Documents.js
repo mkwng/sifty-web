@@ -1,7 +1,6 @@
 import React from 'react';
 import DocumentCard from './DocumentCard';
 import NewDocument from './NewDocument';
-import createAbsoluteGrid from 'react-absolute-grid';
 import { connect } from "react-redux";
 import { setCollection } from '../../actions';
 
@@ -9,7 +8,6 @@ import firebase from '../../firebase';
 import * as _ from 'lodash';
 import TopNav from '../TopNav/TopNav';
 
-const AbsoluteGrid = createAbsoluteGrid(DocumentCard);
 
 class Documents extends React.Component {
   constructor(props) {
@@ -33,7 +31,6 @@ class Documents extends React.Component {
         collection: firebase.database().ref(`collections/${this.collectionId}`),
       }
     }
-    this.onMove =  _.debounce(this.onMove, 40).bind(this);
   }
   componentDidMount() { this.addListeners() }
   componentWillUnmount() { this.removeListeners() }
@@ -64,54 +61,19 @@ class Documents extends React.Component {
     })
   }
 
-  onMove = function(source, target) {
-    if(target && source){
-      source = _.find(this.state.documents, {key: source});
-      target = _.find(this.state.documents, {key: target});
-      const targetSort = target.sort;
-  
-      this.setState({
-        documents: this.state.documents.map(function(item) {
-          //Decrement sorts between positions when target is greater
-          if(item.key === source.key) {
-            return {
-              ...item,
-              sort: targetSort
-            }
-          } else if(target.sort > source.sort && (item.sort <= target.sort && item.sort > source.sort)){
-            return {
-              ...item,
-              sort: item.sort - 1
-            };
-          //Increment sorts between positions when source is greater
-          } else if (item.sort >= target.sort && item.sort < source.sort){
-            return {
-              ...item,
-              sort: item.sort + 1
-            };
-          }
-          return item;
-        }),
-      })
-    } else {
-      console.log("missing target or source");
-      return;
-    }
-  }
-
   render() {
+    const { documents } = this.state;
+
     return (
       <div id="documents-grid"> 
         <TopNav user={this.props.user}> </TopNav>
-        <AbsoluteGrid items={this.state.documents}
-                      onMove={this.onMove}
-                      dragEnabled={true}
-                      responsive={true}
-                      verticalMargin={8}
-                      itemWidth={304}
-                      animation='transform 100ms ease'
-                      itemHeight={216}
-        />
+
+        {
+          documents.map( (document) => (
+            <DocumentCard {...document} />
+          ))
+        }
+
         <NewDocument collectionSize={this.state.documents.length} 
                     collectionName={this.props.match.params.collection}
                     collectionId={this.collectionId} 

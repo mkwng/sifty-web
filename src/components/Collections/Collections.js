@@ -17,22 +17,6 @@ class Collections extends React.Component {
       }
     };
   }
-  // componentDidMount() { this.addListeners() }
-  // componentWillUnmount() { this.removeListeners() }
-
-  // addListeners = () => {
-  //   let loadedCollections = [];
-  //   this.state.ref.collections.on("child_added", snap => {
-  //     let newC = snap.val();
-  //     newC.key = snap.key;
-  //     loadedCollections.push(newC);
-  //     this.setState({ collections: loadedCollections });
-  //   });
-  // };
-
-  // removeListeners = () => {
-  //   this.state.ref.collections.off();
-  // };
 
   render() {
     const { collections } = this.state;

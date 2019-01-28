@@ -91,13 +91,8 @@ const CardDescriptionContext = styled.div`
 `
 
 class DocumentCard extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = props.item;
-  }
-
   componentDidMount() {
-    if(!this.state.metadata.image) {
+    if(!this.props.metadata.image) {
       this.addImageListener();
     }
   }
@@ -135,12 +130,12 @@ class DocumentCard extends React.Component {
       <Card>
         <CardThumbnail>
           <CardThumbnailFavicon><Icon type="align-left"/></CardThumbnailFavicon>
-          <CardThumbnailImage><img src={this.imageUrl(this.state.metadata)} alt={this.state.metadata.description} /></CardThumbnailImage>
+          <CardThumbnailImage><img src={this.imageUrl(this.props.metadata)} alt={this.props.metadata.description} /></CardThumbnailImage>
         </CardThumbnail>
         <CardDescription>
           <CardDescriptionTitle>
-            <h3>{this.state.metadata.title}</h3>
-            <p>{this.state.url}</p>
+            <h3>{this.props.metadata.title}</h3>
+            <p>{this.props.url}</p>
           </CardDescriptionTitle>
           <CardDescriptionContext><Icon type="ellipsis"/></CardDescriptionContext>
         </CardDescription>
