@@ -18,13 +18,9 @@ import 'antd/dist/antd.css';
 import { BrowserRouter as Router, Switch, Route, withRouter } from 'react-router-dom';
 
 // Redux
-import { createStore } from 'redux';
 import { Provider, connect } from 'react-redux';
-import { composeWithDevTools } from 'redux-devtools-extension';
-import rootReducer from './reducers';
 import { setUser, clearUser } from './actions';
-
-const store = createStore(rootReducer, composeWithDevTools());
+import store from './store/store';
 
 class Root extends React.Component {
   componentDidMount() {

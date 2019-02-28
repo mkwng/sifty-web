@@ -5,7 +5,6 @@ import { connect } from "react-redux";
 import { setCollection } from '../../actions';
 
 import firebase from '../../firebase';
-import * as _ from 'lodash';
 import TopNav from '../TopNav/TopNav';
 
 
